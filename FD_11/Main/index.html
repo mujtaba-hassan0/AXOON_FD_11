@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-Do-List</title>
+  <link rel="stylesheet" href="output.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 overflow-scroll">
+
+
+  <header class="w-full py-6 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white text-center shadow-lg">
+    <h1 class="text-4xl font-extrabold tracking-wide">My To-Do List</h1>
+  </header>
+
+
+  <div id="maindiv" class="w-full flex flex-col items-center gap-10 mt-10">
+
+
+    <div class="w-11/12 max-w-xl border border-gray-300 rounded-2xl p-5 flex flex-col gap-5 md:flex-row items-center justify-between bg-white shadow-md">
+      <input id="input" class="border border-gray-300 rounded-xl pl-3 h-[40px] w-full md:w-2/3 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 transition" type="text" placeholder="Enter a task..." />
+      <button id="addbtn" class="bg-cyan-500 text-white font-semibold px-6 py-2 rounded-xl hover:bg-cyan-600 transition shadow-md">
+        Add
+      </button>
+    </div>
+
+
+    <div id="tasksContainer" class="w-11/12 max-w-xl flex flex-col gap-4 mb-10"></div>
+  </div>
+
+
+  <script>
+    let addbtn = document.getElementById("addbtn");
+    let input = document.getElementById("input");
+    let tasksContainer = document.getElementById("tasksContainer");
+
+    addbtn.addEventListener('click', () => {
+      let taskText = input.value.trim();
+
+      if (taskText === '') {
+        alert("Please..! Enter Task First");
+        return;
+      }
+
+      const taskItem = document.createElement("div");
+      taskItem.className = "flex flex-col md:flex-row justify-between items-center gap-4 bg-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-lg transition";
+
+      const taskName = document.createElement("span");
+      taskName.className = "text-gray-800 font-medium text-lg";
+      taskName.textContent = taskText;
+
+      const buttonsDiv = document.createElement("div");
+      buttonsDiv.className = "flex gap-3";
+
+      const editBtn = document.createElement("button");
+      editBtn.className = "relative group bg-amber-400 text-white p-2 rounded hover:bg-amber-500 transition hover:cursor-pointer";
+      editBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487a2.25 2.25 0 013.182 3.182l-10.5 10.5a2.25 2.25 0 01-1.061.56l-4.125.825.825-4.125a2.25 2.25 0 01.56-1.061l10.5-10.5z" />
+        </svg>
+        <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded bg-black text-white text-xs opacity-0 group-hover:opacity-100 transition pointer-events-none">
+          Edit
+        </span>
+      `;
+      editBtn.addEventListener("click", () => {
+        let newName = prompt("Edit your task:", taskName.textContent);
+        if (newName !== null && newName.trim() !== "") {
+          taskName.textContent = newName.trim();
+        }
+      });
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "relative group bg-rose-500 text-white p-2 rounded hover:bg-rose-600 transition hover:cursor-pointer shadow-md";
+      deleteBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded bg-black text-white text-xs opacity-0 group-hover:opacity-100 transition pointer-events-none">
+          Delete
+        </span>
+      `;
+      deleteBtn.addEventListener("click", () => {
+        taskItem.remove();
+      });
+
+      buttonsDiv.appendChild(editBtn);
+      buttonsDiv.appendChild(deleteBtn);
+      taskItem.appendChild(taskName);
+      taskItem.appendChild(buttonsDiv);
+      tasksContainer.appendChild(taskItem);
+      input.value = "";
+    });
+  </script>
+</body>
+</html>
